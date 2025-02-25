@@ -61,6 +61,16 @@
 (https://www.postman.com/downloads) и приложите соответствующие скрины, на которых указаны
 запросы и ответы со стороны сервиса для **всех** его операций.
 
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
 #### Демонстрация работы
 todo
 
@@ -85,6 +95,9 @@ todo
 
 #### Демонстрация работы
 todo
+
+![alt text](image-6.png)
+![alt text](image-5.png)
 
 ---
 
