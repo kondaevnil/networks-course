@@ -45,6 +45,12 @@ class Store:
             product.name = name
             product.description = description
         return product.to_json(id) if product else None
+    
+    def add_image(self, id, icon):
+        product = self.products.get(id)
+        if product:
+            product.icon = icon
+        return product.to_json(id) if product else None
 
 
 store = Store()
@@ -63,7 +69,10 @@ def get_products():
 
 @app.get("/product/{product_id}")
 def get_product(product_id: int):
-    return store.get_product(product_id)
+    res = store.get_product(product_id)
+    if not res:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return res
 
 @app.post("/product")
 def add_product(name: str, description: str):
@@ -71,11 +80,17 @@ def add_product(name: str, description: str):
 
 @app.delete("/product/{product_id}")
 def remove_product(product_id: int):
-    return store.remove_product(product_id)
+    res = store.remove_product(product_id)
+    if not res:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return res
 
 @app.put("/product/{product_id}")
 def edit_product(product_id: int, name: str, description: str):
-    return store.edit_product(product_id, name, description)
+    res = store.edit_product(product_id, name, description)
+    if not res:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return res
 
 @app.post("/product/{product_id}/image")
 async def upload_image(product_id: int, icon: UploadFile = File(...)):
@@ -84,7 +99,7 @@ async def upload_image(product_id: int, icon: UploadFile = File(...)):
             file_extension = icon.filename.split(".")[-1]
             file_name = f"{product_id}.{file_extension}"
             file_path = os.path.join(images_dir, file_name)
-            product.icon = file_path
+            store.add_image(product_id, file_path)
 
             with open(file_path, "wb") as buffer:
                 buffer.write(await icon.read())
